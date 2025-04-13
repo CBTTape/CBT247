@@ -1,0 +1,458 @@
+//SBGOLOBU JOB ,'SAM GOLOB',CLASS=B,
+//    MSGCLASS=X,NOTIFY=&SYSUID
+//*
+//REASMLNK PROC
+//ASM    EXEC  PGM=ASMA90,REGION=2048K,
+//             PARM=(DECK,NOOBJECT,NORLD,RENT,TERM,'XREF(SHORT)')
+//SYSUT1   DD  UNIT=SYSDA,SPACE=(CYL,(10,5))
+//SYSUT2   DD  UNIT=SYSDA,SPACE=(CYL,(10,5))
+//SYSUT3   DD  UNIT=SYSDA,SPACE=(CYL,(10,5))
+//SYSPUNCH DD  UNIT=SYSDA,SPACE=(TRK,(5,5)),DISP=(MOD,PASS),DSN=&&X,
+//             DCB=BLKSIZE=3120
+//SYSPRINT DD  SYSOUT=*
+//SYSTERM  DD  SYSOUT=*
+//SYSLIB   DD  DSN=SYS1.MODGEN,DISP=SHR,DCB=BLKSIZE=23440
+//         DD  DSN=SYS1.MACLIB,DISP=SHR
+//LKED   EXEC  PGM=IEWL,PARM='MAP,RENT,REUS,REFR,LET,NCAL',COND=(0,LT)
+//SYSPRINT DD  SYSOUT=*
+//SYSLIBX  DD  DSN=&&X,DISP=(OLD,DELETE)
+//SYSLMOD  DD  DISP=SHR,DSN=&OUTPUT
+//SYSUT1   DD  UNIT=SYSDA,SPACE=(TRK,(5,5))
+//       PEND
+//*
+//LSTB      EXEC REASMLNK,OUTPUT='SYS1.CBT.LINKLIB',   <=== CHANGE
+//  PARM.LKED='NCAL,MAP,LIST,LET'
+//ASM.SYSIN   DD *
+LSTB     CSECT
+         B     68(,R15)                47F0 F044         *.00.*
+         DC    X'13',C'L'              13D3              *.L*
+         DC    C'STB  25D'             E2E3C24040F2F5C4  *STB  25D*
+         DC    C'EC88 17.'             C5C3F8F840F1F74B  *EC88 17.*
+         DC    C'49'                   F4F9              *49*
+         DC    X'0000054817FF181D'     0000054817FF181D  *........*
+         DC    X'58D0D004'             58D0D004          *.}}.*
+         DC    C'&&0'                  50F0              *&0*
+         DC    X'D0105800C01847',C'0'  D0105800C01847F0  *}...{..0*
+         DC    X'C0340000010358',C'0'  C0340000010358F0  *{......0*
+         DC    X'C0300A7898ECD00C'     C0300A7898ECD00C  *{...q.}.*
+         DC    X'92FFD00C07FE'         92FFD00C07FE      *k.}...*
+         STM   R14,R12,12(R13)         90EC D00C         *..}.*
+         LR    R12,R15                 18CF              *..*
+         LR    R2,R1                   1821              *..*
+         L     R0,24(,R12)             5800 C018         *..{.*
+         B     88(,R12)                47F0 C058         *.0{.*
+         DC    X'0000'                 0000              *..*
+         UPT   ,                       0102              *..*
+         L     R15,84(,R12)            58F0 C054         *.0{.*
+         SR    R1,R1                   1B11              *..*
+         SVC   120     GETMAIN         0A78              *..*
+         ST    R1,8(,R13)              5010 D008         *&.}.*
+         ST    R13,4(,R1)              50D0 1004         *&}..*
+         LR    R13,R1                  18D1              *.J*
+         MVC   76(16,R13),0(R2)        D20F D04C 2000    *K.}<..*
+         L     R1,16                   5810 0010         *....*
+         L     R1,0(,R1)               5810 1000         *....*
+         L     R1,4(,R1)               5810 1004         *....*
+         L     R1,180(,R1)             5810 10B4         *....*
+         L     R1,264(,R1)             5810 1108         *....*
+         LA    R0,0(,R1)               4100 1000         *....*
+         LTR   R0,R0                   1200              *..*
+         BZ    190(,R12)               4780 C0BE         *..{.*
+         L     R1,8(,R2)               5810 2008         *....*
+         LA    R1,0(,R1)               4110 1000         *....*
+         TM    0(R2),X'80'             9180 2000         *j...*
+         BO    190(,R12)               4710 C0BE         *..{.*
+         CR    R0,R1                   1901              *..*
+         BNE   190(,R12)               4770 C0BE         *..{.*
+         L     R1,0(,R2)               5810 2000         *....*
+         LH    R4,0(,R1)               4840 1000         *. ..*
+         LH    R5,2(,R1)               4850 1002         *.&..*
+         LA    R4,0(R4,R1)             4144 1000         *....*
+         LA    R5,4(R5,R1)             4155 1004         *....*
+         SR    R4,R5                   1B45              *..*
+         B     344(,R12)               47F0 C158         *.0A.*
+         L     R5,0(,R2)               5850 2000         *.&..*
+         LH    R4,0(,R5)               4840 5000         *. &.*
+         LA    R5,2(,R5)               4150 5002         *.&&.*
+         LA    R1,92(,R13)             4110 D05C         *..}**
+         ST    R1,76(,R13)             5010 D04C         *&.}<*
+         LTR   R1,R0                   1210              *..*
+         BNZ   260(,R12)               4770 C104         *..A.*
+         XC    92(256,R13),92(R13)     D7FF D05C D05C    *P.}*}**
+         XC    348(140,R13),348(R13)   D78B D15C D15C    *P.J*J**
+         LA    R0,352(,R13)            4100 D160         *..J-*
+         ST    R0,84(,R13)             5000 D054         *&.}.*
+         LA    R0,464(,R13)            4100 D1D0         *..J}*
+         ST    R0,404(,R13)            5000 D194         *&.Jm*
+         MVI   409(R13),X'18'          9218 D199         *k.Jr*
+         OI    476(R13),C' '           9640 D1DC         *o J.*
+         LA    R1,424(,R13)            4110 D1A8         *..Jy*
+         B     278(,R12)               47F0 C116         *.0A.*
+         ST    R0,84(,R13)             5000 D054         *&.}.*
+         MVC   80(4,R13),52(R1)        D203 D050 1034    *K.}&..*
+         L     R1,48(,R1)              5810 1030         *....*
+         L     R1,256(,R1)             5810 1100         *....*
+         ST    R1,88(,R13)             5010 D058         *&.}.*
+         MVC   96(8,R13),12(R1)        D207 D060 100C    *K.}-..*
+         MVI   104(R13),C' '           9240 D068         *k }.*
+         NI    28(R1),C'"'             947F 101C         *m"..*
+         LTR   R4,R4                   1244              *..*
+         BP    306(,R12)               4720 C132         *..A.*
+         OI    28(R1),X'80'            9680 101C         *o...*
+         LA    R1,9                    4110 0009         *....*
+         STH   R1,94(,R13)             4010 D05E         * .};*
+         LA    R0,13(,R4)              4100 400D         *.. .*
+         STH   R0,92(,R13)             4000 D05C         * .}**
+         LTR   R1,R4                   1214              *..*
+         BNP   340(,R12)               47D0 C154         *.}A.*
+         BCTR  R1,R0                   0610              *..*
+         MVC   105(1,R13),0(R5)        D200 D069 5000    *K.}.&.*
+         EX    R1,330(,R12)            4410 C14A         *..A¢*
+         LA    R2,76(,R13)             4120 D04C         *..}<*
+         L     R1,80(,R13)             5810 D050         *..}&*
+         L     R2,88(,R13)             5820 D058         *..}.*
+         LA    R3,72(,R13)             4130 D048         *..}.*
+         SR    R0,R0                   1B00              *..*
+         ST    R0,72(,R13)             5000 D048         *&.}.*
+         STM   R1,R3,488(R13)          9013 D1E8         *..JY*
+         MVC   500(4,R13),84(R13)      D203 D1F4 D054    *K.J4}.*
+         MVI   804(R13),C' '           9240 D324         *k L.*
+         MVC   805(130,R13),804(R13)   D281 D325 D324    *KaL.L.*
+         MVC   935(7,R13),804(R13)     D206 D3A7 D324    *K.LxL.*
+         LA    R15,508(,R13)           41F0 D1FC         *.0J.*
+         XC    0(84,R15),0(R15)        D753 F000 F000    *P.0.0.*
+         MVI   1(R15),X'08'            9208 F001         *k.0.*
+         LA    R0,1452(,R12)           4100 C5AC         *..E.*
+         ST    R0,8(,R15)              5000 F008         *&.0.*
+         MVC   12(8,R15),1520(R12)     D207 F00C C5F0    *K.0.E0*
+         MVC   20(8,R15),1520(R12)     D207 F014 C5F0    *K.0.E0*
+         MVC   28(8,R15),1520(R12)     D207 F01C C5F0    *K.0.E0*
+         MVC   52(8,R15),1520(R12)     D207 F034 C5F0    *K.0.E0*
+         MVC   60(8,R15),1520(R12)     D207 F03C C5F0    *K.0.E0*
+         MVI   68(R15),X'08'           9208 F044         *k.0.*
+         MVI   69(R15),X'08'           9208 F045         *k.0.*
+         MVI   70(R15),X'08'           9208 F046         *k.0.*
+         MVC   76(8,R15),1520(R12)     D207 F04C C5F0    *K.0<E0*
+         ST    R15,504(,R13)           50F0 D1F8         *&0J8*
+         LA    R1,488(,R13)            4110 D1E8         *..JY*
+         NOPR  R0                      0700              *..*
+         BAL   R15,488(,R12)           45F0 C1E8         *.0AY*
+         DC    AL4(A0001E0)            000001E0          *...\*
+         DC    X'00000000'             00000000          *....*
+A0001E0  DC    C'IKJDAIR '             C9D2D1C4C1C9D940  *IKJDAIR *
+         SVC   6       LINK            0A06              *..*
+         LTR   R15,R15                 12FF              *..*
+         BZ    512(,R12)               4780 C200         *..B.*
+         LA    R0,44                   4100 002C         *....*
+         LA    R1,1584(,R12)           4110 C630         *..F.*
+         SVC   93      TPUT            0A5D              *.)*
+         LA    R1,88                   4110 0058         *....*
+         SVC   13      ABEND           0A0D              *..*
+         MVC   1248(104,R13),1912(R12) D267 D4E0 C778    *K.M\G.*
+         MVC   1288(8,R13),520(R13)    D207 D508 D208    *K.N.K.*
+         LA    R1,1248(,R13)           4110 D4E0         *..M\*
+         ST    R1,800(,R13)            5010 D320         *&.L.*
+         MVI   800(R13),X'80'          9280 D320         *k.L.*
+         LA    R1,800(,R13)            4110 D320         *..L.*
+         SVC   19      OPEN            0A13              *..*
+         TM    1296(R13),X'10'         9110 D510         *j.N.*
+         BO    556(,R12)               4710 C22C         *..B.*
+         LA    R1,99                   4110 0063         *....*
+         SVC   13      ABEND           0A0D              *..*
+         LTR   R4,R4                   1244              *..*
+         BNP   604(,R12)               47D0 C25C         *.}B**
+         CH    R4,1676(,R12)           4940 C68C         *. F.*
+         BNH   588(,R12)               47D0 C24C         *.}B<*
+         LA    R0,14                   4100 000E         *....*
+         LA    R1,1678(,R12)           4110 C68E         *..F.*
+         SVC   93      TPUT            0A5D              *.)*
+         BAL   R11,1310(,R12)          45B0 C51E         *..E.*
+         B     630(,R12)               47F0 C276         *.0B.*
+         BCTR  R4,R0                   0640              *. *
+         OC    935(1,R13),0(R5)        D600 D3A7 5000    *O.Lx&.*
+         EX    R4,590(,R12)            4440 C24E         *. B+*
+         B     630(,R12)               47F0 C276         *.0B.*
+         L     R1,16                   5810 0010         *....*
+         L     R1,0(,R1)               5810 1000         *....*
+         L     R1,4(,R1)               5810 1004         *....*
+         L     R1,180(,R1)             5810 10B4         *....*
+         L     R1,264(,R1)             5810 1108         *....*
+         MVC   935(7,R13),0(R1)        D206 D3A7 1000    *K.Lx..*
+         XC    1220(28,R13),1220(R13)  D71B D4C4 D4C4    *P.MDMD*
+         XC    942(3,R13),942(R13)     D702 D3AE D3AE    *P.L.L.*
+         BAL   R11,1386(,R12)          45B0 C56A         *..E¦*
+         MVC   945(3,R13),961(R13)     D202 D3B1 D3C1    *K.L.LA*
+         LA    R2,640(,R13)            4120 D280         *..K.*
+         MVC   640(80,R13),804(R13)    D24F D280 D324    *K|K.L.*
+         LA    R0,713(,R13)            4100 D2C9         *..KI*
+         ST    R0,948(,R13)            5000 D3B4         *&.L.*
+         CLC   1692(6,R12),935(R13)    D505 C69C D3A7    *N.F.Lx*
+         BE    748(,R12)               4780 C2EC         *..B.*
+         CLC   1742(7,R12),935(R13)    D506 C6CE D3A7    *N.F.Lx*
+         BE    724(,R12)               4780 C2D4         *..BM*
+         CLC   1749(5,R12),935(R13)    D504 C6D5 D3A7    *N.FNLx*
+         BE    758(,R12)               4780 C2F6         *..B6*
+         CLC   1754(7,R12),935(R13)    D506 C6DA D3A7    *N.F.Lx*
+         BNE   758(,R12)               4770 C2F6         *..B6*
+         LA    R0,27                   4100 001B         *....*
+         LA    R1,1761(,R12)           4110 C6E1         *..F.*
+         SVC   93      TPUT            0A5D              *.)*
+         B     758(,R12)               47F0 C2F6         *.0B6*
+         LA    R0,43                   4100 002B         *....*
+         LA    R1,1788(,R12)           4110 C6FC         *..F.*
+         SVC   93      TPUT            0A5D              *.)*
+         LA    R0,707(,R13)            4100 D2C3         *..KC*
+         ST    R0,948(,R13)            5000 D3B4         *&.L.*
+         SR    R6,R6                   1B66              *..*
+         B     758(,R12)               47F0 C2F6         *.0B6*
+         LA    R0,44                   4100 002C         *....*
+         LA    R1,1628(,R12)           4110 C65C         *..F**
+         SVC   93      TPUT            0A5D              *.)*
+         CLC   945(3,R13),1672(R12)    D502 D3B1 C688    *N.L.Fh*
+         BE    1092(,R12)              4780 C444         *..D.*
+         MVC   942(3,R13),945(R13)     D202 D3AE D3B1    *K.L.L.*
+         BAL   R11,1386(,R12)          45B0 C56A         *..E¦*
+         MVC   1088(129,R13),956(R13)  D280 D440 D3BC    *K.M L.*
+         LA    R3,9                    4130 0009         *....*
+         LA    R4,1088(,R13)           4140 D440         *. M *
+         CLC   1692(6,R12),935(R13)    D505 C69C D3A7    *N.F.Lx*
+         BE    842(,R12)               4780 C34A         *..C¢*
+         CLC   1742(7,R12),935(R13)    D506 C6CE D3A7    *N.F.Lx*
+         BE    898(,R12)               4780 C382         *..Cb*
+         CLC   1749(5,R12),935(R13)    D504 C6D5 D3A7    *N.FNLx*
+         BE    980(,R12)               4780 C3D4         *..CM*
+         CLC   1754(7,R12),935(R13)    D506 C6DA D3A7    *N.F.Lx*
+         BNE   1064(,R12)              4770 C428         *..D.*
+         CLC   7(3,R4),1672(R12)       D502 4007 C688    *N. .Fh*
+         BE    880(,R12)               4780 C370         *..C.*
+         MVC   0(7,R2),0(R4)           D206 2000 4000    *K... .*
+         LA    R2,9(,R2)               4120 2009         *....*
+         C     R2,948(,R13)            5920 D3B4         *..L.*
+         BNH   880(,R12)               47D0 C370         *.}C.*
+         LA    R1,640(,R13)            4110 D280         *..K.*
+         LA    R0,80                   4100 0050         *...&*
+         SVC   93      TPUT/TGET       0A5D              *.)*
+         MVC   640(80,R13),804(R13)    D24F D280 D324    *K|K.L.*
+         LA    R2,640(,R13)            4120 D280         *..K.*
+         LA    R4,13(,R4)              4140 400D         *.  .*
+         BCT   R3,792(,R12)            4630 C318         *..C.*
+         MVC   945(3,R13),1214(R13)    D202 D3B1 D4BE    *K.L.M.*
+         B     758(,R12)               47F0 C2F6         *.0B6*
+         CLC   7(3,R4),1672(R12)       D502 4007 C688    *N. .Fh*
+         BE    880(,R12)               4780 C370         *..C.*
+         MVC   6(7,R2),0(R4)           D206 2006 4000    *K... .*
+         SR    R5,R5                   1B55              *..*
+         MVC   942(3,R13),7(R4)        D202 D3AE 4007    *K.L. .*
+         LA    R5,1(,R5)               4150 5001         *.&&.*
+         LA    R6,1(,R6)               4160 6001         *.--.*
+         BAL   R11,1386(,R12)          45B0 C56A         *..E¦*
+         MVC   942(3,R13),1082(R13)    D202 D3AE D43A    *K.L.M.*
+         CLC   942(3,R13),1672(R12)    D502 D3AE C688    *N.L.Fh*
+         BNE   922(,R12)               4770 C39A         *..C.*
+         CVD   R5,624(,R13)            4E50 D270         *+&K.*
+         MVC   632(6,R13),1698(R12)    D205 D278 C6A2    *K.K.Fs*
+         ED    632(6,R13),629(R13)     DE05 D278 D275    *..K.K.*
+         MVC   0(5,R2),634(R13)        D204 2000 D27A    *K...K:*
+         LA    R2,15(,R2)              4120 200F         *....*
+         B     852(,R12)               47F0 C354         *.0C.*
+         CLC   7(3,R4),1672(R12)       D502 4007 C688    *N. .Fh*
+         BE    880(,R12)               4780 C370         *..C.*
+         MVC   640(79,R13),1831(R12)   D24E D280 C727    *K+K.G.*
+         MVC   680(7,R13),0(R4)        D206 D2A8 4000    *K.Ky .*
+         LA    R1,640(,R13)            4110 D280         *..K.*
+         LA    R0,79                   4100 004F         *...|*
+         SVC   93      TPUT/TGET       0A5D              *.)*
+         MVC   942(3,R13),7(R4)        D202 D3AE 4007    *K.L. .*
+         BAL   R11,1386(,R12)          45B0 C56A         *..E¦*
+         SR    R0,R0                   1B00              *..*
+         IC    R0,956(,R13)            4300 D3BC         *..L.*
+         LA    R1,957(,R13)            4110 D3BD         *..L.*
+         SVC   93      TPUT            0A5D              *.)*
+         MVC   942(3,R13),1082(R13)    D202 D3AE D43A    *K.L.M.*
+         CLC   942(3,R13),1672(R12)    D502 D3AE C688    *N.L.Fh*
+         BNE   1018(,R12)              4770 C3FA         *..C.*
+         LA    R0,1                    4100 0001         *....*
+         LA    R1,1910(,R12)           4110 C776         *..G.*
+         SVC   93      TPUT            0A5D              *.)*
+         B     880(,R12)               47F0 C370         *.0C.*
+         CLC   935(7,R13),0(R4)        D506 D3A7 4000    *N.Lx .*
+         BE    1216(,R12)              4780 C4C0         *..D{*
+         LA    R4,13(,R4)              4140 400D         *.  .*
+         BCT   R3,1064(,R12)           4630 C428         *..D.*
+         MVC   945(3,R13),1214(R13)    D202 D3B1 D4BE    *K.L.M.*
+         B     758(,R12)               47F0 C2F6         *.0B6*
+         CLC   1704(2,R12),935(R13)    D501 C6A8 D3A7    *N.FyLx*
+         BNE   1162(,R12)              4770 C48A         *..D.*
+         CLC   1749(5,R12),935(R13)    D504 C6D5 D3A7    *N.FNLx*
+         BE    1300(,R12)              4780 C514         *..E.*
+         CLC   640(80,R13),804(R13)    D54F D280 D324    *N|K.L.*
+         BE    1132(,R12)              4780 C46C         *..D%*
+         LA    R1,640(,R13)            4110 D280         *..K.*
+         LA    R0,80                   4100 0050         *...&*
+         SVC   93      TPUT/TGET       0A5D              *.)*
+         MVC   640(50,R13),1467(R12)   D231 D280 C5BB    *K.K.E.*
+         CVD   R6,624(,R13)            4E60 D270         *+-K.*
+         ED    677(6,R13),629(R13)     DE05 D2A5 D275    *..KvK.*
+         LA    R1,640(,R13)            4110 D280         *..K.*
+         LA    R0,50                   4100 0032         *....*
+         SVC   93      TPUT/TGET       0A5D              *.)*
+         B     1300(,R12)              47F0 C514         *.0E.*
+         MVC   640(80,R13),804(R13)    D24F D280 D324    *K|K.L.*
+         MVC   640(8,R13),1528(R12)    D207 D280 C5F8    *K.K.E8*
+         MVC   649(7,R13),935(R13)     D206 D289 D3A7    *K.KiLx*
+         LA    R1,648(,R13)            4110 D288         *..Kh*
+         LA    R1,1(,R1)               4110 1001         *....*
+         CLI   0(R1),C' '              9540 1000         *n ..*
+         BNE   1184(,R12)              4770 C4A0         *..D.*
+         MVC   1(14,R1),1706(R12)      D20D 1001 C6AA    *K...F.*
+         LA    R1,640(,R13)            4110 D280         *..K.*
+         LA    R0,31                   4100 001F         *....*
+         SVC   93      TPUT/TGET       0A5D              *.)*
+         B     1300(,R12)              47F0 C514         *.0E.*
+         MVC   942(3,R13),7(R4)        D202 D3AE 4007    *K.L. .*
+         CLC   942(3,R13),1672(R12)    D502 D3AE C688    *N.L.Fh*
+         BNE   1258(,R12)              4770 C4EA         *..D.*
+         MVC   640(24,R13),1536(R12)   D217 D280 C600    *K.K.F.*
+         MVC   665(7,R13),935(R13)     D206 D299 D3A7    *K.KrLx*
+         LA    R1,640(,R13)            4110 D280         *..K.*
+         LA    R0,32                   4100 0020         *....*
+         SVC   93      TPUT/TGET       0A5D              *.)*
+         B     1300(,R12)              47F0 C514         *.0E.*
+         BAL   R11,1386(,R12)          45B0 C56A         *..E¦*
+         SR    R0,R0                   1B00              *..*
+         IC    R0,956(,R13)            4300 D3BC         *..L.*
+         LA    R1,957(,R13)            4110 D3BD         *..L.*
+         SVC   93      TPUT            0A5D              *.)*
+         MVC   942(3,R13),1082(R13)    D202 D3AE D43A    *K.L.M.*
+         CLC   942(3,R13),1672(R12)    D502 D3AE C688    *N.L.Fh*
+         BNE   1258(,R12)              4770 C4EA         *..D.*
+         LA    R0,24                   4100 0018         *....*
+         LA    R1,1560(,R12)           4110 C618         *..F.*
+         SVC   93      TPUT            0A5D              *.)*
+         LA    R1,800(,R13)            4110 D320         *..L.*
+         SVC   20      CLOSE           0A14              *..*
+         B     28(,R12)                47F0 C01C         *.0{.*
+         LA    R0,22                   4100 0016         *....*
+         LA    R1,1720(,R12)           4110 C6B8         *..F.*
+         LA    R15,1                   41F0 0001         *.0..*
+         SLL   R15,24                  89F0 0018         *i0..*
+         OR    R1,R15                  161F              *..*
+         SVC   93      TPUT            0A5D              *.)*
+         LA    R1,720(,R13)            4110 D2D0         *..K}*
+         NOPR  R0                      0700              *..*
+         B     1344(,R12)              47F0 C540         *.0E *
+         DC    X'80000000'             80000000          *....*
+         LA    R1,0(,R1)               4110 1000         *....*
+         O     R1,1340(,R12)           5610 C53C         *..E.*
+         LA    R0,80                   4100 0050         *...&*
+         SVC   93      TGET            0A5D              *.)*
+         MVC   935(7,R13),720(R13)     D206 D3A7 D2D0    *K.LxK}*
+         CLC   727(73,R13),804(R13)    D548 D2D7 D324    *N.KPL.*
+         BER   R11                     078B              *..*
+         LA    R0,14                   4100 000E         *....*
+         LA    R1,1678(,R12)           4110 C68E         *..F.*
+         SVC   93      TPUT            0A5D              *.)*
+         B     1310(,R12)              47F0 C51E         *.0E.*
+         LA    R1,1220(,R13)           4110 D4C4         *..MD*
+         MVI   4(R1),X'00'             9200 1004         *k...*
+         MVI   5(R1),X'48'             9248 1005         *k...*
+         LA    R14,1248(,R13)          41E0 D4E0         *.\M\*
+         ST    R14,8(,R1)              50E0 1008         *&\..*
+         LA    R14,956(,R13)           41E0 D3BC         *.\L.*
+         ST    R14,12(,R1)             50E0 100C         *&\..*
+         LA    R14,942(,R13)           41E0 D3AE         *.\L.*
+         ST    R14,24(,R1)             50E0 1018         *&\..*
+         LA    R14,955(,R13)           41E0 D3BB         *.\L.*
+         ST    R14,20(,R1)             50E0 1014         *&\..*
+         L     R15,1296(,R13)          58F0 D510         *.0N.*
+         BALR  R14,R15                 05EF              *..*
+         LA    R1,1220(,R13)           4110 D4C4         *..MD*
+         L     R14,8(,R1)              58E0 1008         *.\..*
+         L     R15,52(,R14)            58F0 E034         *.0\.*
+         BALR  R14,R15                 05EF              *..*
+         BR    R11                     07FB              *..*
+         DC    X'000D'                 000D              *..*
+         DC    C'SYS1.BRO'             E2E8E2F14BC2D9D6  *SYS1.BRO*
+         DC    C'DCAST==='             C4C3C1E2E37E7E7E  *DCAST===*
+         DC    C'=== TOTA'             7E7E7E40E3D6E3C1  *=== TOTA*
+         DC    C'L NUMBER'             D340D5E4D4C2C5D9  *L NUMBER*
+         DC    C' OF MAIL'             40D6C640D4C1C9D3  * OF MAIL*
+         DC    C' RECORDS'             40D9C5C3D6D9C4E2  * RECORDS*
+         DC    C' ='                   407E              * =*
+         DC    C' ',X'20'              4020              * .*
+         DC    X'20202120'             20202120          *....*
+         DC    C' ======',X'00'        407E7E7E7E7E7E00  * ======.*
+         DC    X'0000'                 0000              *..*
+         DC    C'        '             4040404040404040  *        *
+         DC    C'*** USER'             5C5C5C40E4E2C5D9  **** USER*
+         DC    C'*** NO T'             5C5C5C40D5D640E3  **** NO T*
+         DC    C'SO MAIL '             E2D640D4C1C9D340  *SO MAIL *
+         DC    C'FOR USER'             C6D6D940E4E2C5D9  *FOR USER*
+         DC    C'*** NO M'             5C5C5C40D5D640D4  **** NO M*
+         DC    C'ORE TSO '             D6D9C540E3E2D640  *ORE TSO *
+         DC    C'MAIL ***'             D4C1C9D3405C5C5C  *MAIL ****
+         DC    C'*** SYS1'             5C5C5C40E2E8E2F1  **** SYS1*
+         DC    C'.BRODCAS'             4BC2D9D6C4C3C1E2  *.BRODCAS*
+         DC    C'T COULD '             E340C3D6E4D3C440  *T COULD *
+         DC    C'NOT BE A'             D5D6E340C2C540C1  *NOT BE A*
+         DC    C'LLOCATED'             D3D3D6C3C1E3C5C4  *LLOCATED*
+         DC    C' ***=== '             405C5C5C7E7E7E40  * ***=== *
+         DC    C'TSO USER'             E3E2D640E4E2C5D9  *TSO USER*
+         DC    C'S LISTED'             E240D3C9E2E3C5C4  *S LISTED*
+         DC    C' IN BROD'             40C9D540C2D9D6C4  * IN BROD*
+         DC    C'CAST DAT'             C3C1E2E340C4C1E3  *CAST DAT*
+         DC    C'ASET ==='             C1E2C5E3407E7E7E  *ASET ===*
+         DC    X'000000000007'         000000000007      *......*
+         DC    C'INVALID '             C9D5E5C1D3C9C440  *INVALID *
+         DC    C'USERID= '             E4E2C5D9C9C47E40  *USERID= *
+         DC    C'LIST'                 D3C9E2E3          *LIST*
+         DC    C' ',X'20'              4020              * .*
+         DC    X'20202020'             20202020          *....*
+         DC    C'= NOT LI'             7E40D5D6E340D3C9  *= NOT LI*
+         DC    C'STED ***'             E2E3C5C4405C5C5C  *STED ****
+         DC    C'ENTER US'             C5D5E3C5D940E4E2  *ENTER US*
+         DC    C'ERID OR '             C5D9C9C440D6D940  *ERID OR *
+         DC    C'"END":= '             7FC5D5C47F7A7E40  *"END":= *
+         DC    C'USAGE= A'             E4E2C1C7C57E40C1  *USAGE= A*
+         DC    C'LL= INDE'             D3D37E40C9D5C4C5  *LL= INDE*
+         DC    C'X=== TSO'             E77E7E7E40E3E2D6  *X=== TSO*
+         DC    C' USERS W'             40E4E2C5D9E240E6  * USERS W*
+         DC    C'ITH MAIL'             C9E3C840D4C1C9D3  *ITH MAIL*
+         DC    C' ====== '             407E7E7E7E7E7E40  * ====== *
+         DC    C'NUMBER O'             D5E4D4C2C5D940D6  *NUMBER O*
+         DC    C'F MAIL M'             C640D4C1C9D340D4  *F MAIL M*
+         DC    C'ESSAGES '             C5E2E2C1C7C5E240  *ESSAGES *
+         DC    C'BY TSO U'             C2E840E3E2D640E4  *BY TSO U*
+         DC    C'SER ===*'             E2C5D9407E7E7E5C  *SER ===**
+         DC    C'-*-*-*-*'             605C605C605C605C  *-*-*-*-**
+         DC    C'-*-*-*-*'             605C605C605C605C  *-*-*-*-**
+         DC    C'-*-*-*-*'             605C605C605C605C  *-*-*-*-**
+         DC    C'-*-*  MA'             605C605C4040D4C1  *-*-*  MA*
+         DC    C'IL FOR X'             C9D340C6D6D940E7  *IL FOR X*
+         DC    C'XXXXXX *'             E7E7E7E7E7E7405C  *XXXXXX **
+         DC    C'-*-*-*-*'             605C605C605C605C  *-*-*-*-**
+         DC    C'-*-*-*-*'             605C605C605C605C  *-*-*-*-**
+         DC    C'-*-*-*-*'             605C605C605C605C  *-*-*-*-**
+         DC    C'-*-*-* ',X'00'        605C605C605C4000  *-*-*-* .*
+         DC    X'0000000000000000'     0000000000000000  *........*
+         DC    X'0000000000000000'     0000000000000000  *........*
+         DC    X'0100000000000001'     0100000000000001  *........*
+         DC    X'0000200000000001'     0000200000000001  *........*
+         DC    X'0000000181000000'     0000000181000000  *....a...*
+         DC    C'*-*     '             5C605C4040404040  **-*     *
+         DC    X'0200290001000001'     0200290001000001  *........*
+         DC    X'0000000100000081'     0000000100000081  *.......a*
+         DC    X'0000000100000001'     0000000100000001  *........*
+         DC    X'0000000100000001'     0000000100000001  *........*
+         DC    X'0000000000000001'     0000000000000001  *........*
+         DC    X'0000000100000001'     0000000100000001  *........*
+         DC    X'0000000100000001'     0000000100000001  *........*
+         YREGS
+         END
+//LKED.SYSLIN  DD *
+ INCLUDE SYSLIBX
+ ORDER   LSTB
+ SETSSI  CB507247
+ MODE    RMODE(24),AMODE(24)
+ ENTRY   LSTB
+ NAME    LSTB(R)

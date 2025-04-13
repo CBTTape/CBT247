@@ -1,0 +1,152 @@
+---   BCMDEL  PROGRAM   -  Broadcast Manager                      -
+
+ BCMDEL  -   Delete SOME, or ALL of the User Messages belonging
+             to a given Userid which is defined in the BRODCAST
+             Dataset.
+
+Execution Mode:   TSO Command - using the PUTLINE interface
+--------- ----
+
+Description of Operation:
+----------- -- ---------
+
+  The BCMDEL program is used to DELETE all, or some, of the User
+Messages which belong to a given Userid.  This is done by accessing
+the Userid Record in the Userid Directory, and starting from the
+beginning Userid Message in the chain, running through the chain and
+printing and deleting all the records in the chain.
+
+  There is a difference in the way BCMDEL deletes records and the
+way IBM's LISTBC command deletes records.  IBM's LISTBC only changes
+the first two bytes of the record.  The key byte X'03' is changed to
+X'FF', and the first data byte is changed to the "R" of the "TTR" or
+"CCHHR" of the record on the track.  This is the binary number of the
+data record on the track.  All the rest of the data from the deleted
+message remains, cluttering the BRODCAST Dataset with irrelevant
+debris.  BCMDEL does the same "logical deletion" of the record, but
+it zeroes out the rest of the record with X'00' bytes.  Therefore the
+deleted record looks clean, and different from an occupied message
+record.
+
+  After the deletion, the Free Search Record is examined, and if the
+RBA of the newly deleted record is less than the one pointed to by the
+Free Search Record, the lower RBA of the new deleted record is inserted
+into the Free Search Record instead of what was previously there.
+
+
+JCL Requirements or TSO Allocations:
+--- ------------ -- --- -----------
+
+  The BCMDEL program is a TSO command, but it uses the PUTLINE
+interface to write its output to the terminal.  Therefore you can
+run the BCMDEL program under TSO-in-batch, and still see its
+output.  You can (of course) also run BCMDEL as a TSO command.
+
+Allocation Requirement -
+
+  The particular copy of the BRODCAST dataset which you want to
+look at, must be pointed to by the BRODCAST DD name, as follows:
+
+ALLOC FI(BRODCAST) DA(your.BRODCAST.dataset) SH REUSE
+
+or
+
+//BRODCAST  DD  DISP=SHR,DSN=your.BRODCAST.dataset
+
+
+Subcommands:
+-----------
+            INSTRUCTIONS FOR BCMDEL TSO COMMAND
+            ------------ --- ------ --- -------
+      BCMDEL  userid                       - Delete all messages
+                                             for one userid.
+      BCMDEL  userid  SKIP(mm)  MSGS(nn)   - Delete nn messages
+                                             for one userid, after
+                                             skipping the first mm
+                                             messages.
+      BCMDEL  ALL$#@                       - Delete all messages
+                                             for all userids defined
+                                             in the BRODCAST dataset.
+
+Report:
+------
+
+  Here is what you see if Userid IBMUSER had one sample message
+  and we issue:  BCMDEL IBMUSER
+
+  0002C7 Sample User message.....
+         User IBMUSER had       1   Deferred TSO Messages
+         * - - - - End of Messages for this User - - - - *
+
+  Explanation:  The 0002C7 number is the Hex representation of
+         the RBA of the BRODCAST record which the message had
+         occupied.
+
+                Sample User message.....
+         is the actual message text.
+
+                User IBMUSER had       1   Deferred TSO Messages
+         tells you how many messages the Userid had before the
+         deletion.
+
+
+  Here is what you see if Userid IBMUSER had three sample message
+  and we issue:  BCMDEL IBMUSER SKIP(1) MSGS(1)
+
+  Number of MSGS to Skip           1
+  Limit  of MSGS to Delete         1
+  0002C8 Sample user message 2
+         User IBMUSER had       3   Deferred TSO Messages
+         User IBMUSER has       2   Deferred TSO Messages left
+         * - - - - End of Messages for this User - - - - *
+
+  so now, Userid IBMUSER has two messages left, the first, and the
+  third, of the previous messages which were there.
+
+
+Program Logic:
+------- -----
+
+  The basic principles of the program logic were mentioned above,
+in the "Description of Operation" section.
+
+Error Handling:
+----- --------
+
+  BCMDEL checks the entered Userid (the first positional keyword)
+and runs the chain of Userid records to see if this Userid is there.
+If it is not, the following message is issued:
+
+ * - - No USERID Record for User USER134  - - *
+
+* ----------------------------------------------------------------- *
+
+  If the BRODCAST DD allocation is missing, then BCMDEL issues
+the following message:
+
+ IEC130I BRODCAST DD STATEMENT MISSING
+        Bad Open - ALLOC F(BRODCAST) DA(SYS1.BRODCAST) SH REU
+
+* ----------------------------------------------------------------- *
+
+  If no userid was entered after the BCMDEL command then BCMDEL
+returns the reply:
+
+        Please enter the USERID name after Command name
+
+* ----------------------------------------------------------------- *
+
+  If the values entered into the SKIP(mm) or MSGS(nn) are not
+numeric, then the non-numeric character entered is replaced by
+an asterisk (to make the error more visible), and the following
+messages are displayed:
+
+ Limit  of MSGS to Delete  *888*4       Non-Numeric
+ Number of MSGS to Skip    *99*6        Non-Numeric
+
+ MSGS or SKIP keyword values were non-numeric.
+ No User Messages have been deleted.
+   ---------------
+   Return Code = 8
+   ---------------
+

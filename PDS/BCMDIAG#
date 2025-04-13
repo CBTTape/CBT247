@@ -1,0 +1,162 @@
+---   BCMDIAG PROGRAM   -  Broadcast Manager   ---
+
+ BCMDIAG -   Find all User Messages in the BRODCAST Dataset which
+             are not chained to any Userid.  This makes them
+             otherwise inaccessible, and therefore they can not
+             be deleted by any normal method.  These unattached
+             User Messages would clog up the BRODCAST Dataset
+             forever (until an ACCOUNT SYNC), if it were not for
+             the BCMDIAG DELBAD option, which can (and will)
+             delete them.
+
+Execution Mode:   TSO Command - using the PUTLINE interface
+--------- ----
+
+Description of Operation:
+----------- -- ---------
+
+  The BCMDIAG program is used find all User Messages that are
+"orphaned", or unattached to any Userid.  This might be due to
+some corruption of the BRODCAST Dataset.
+
+  How does the BCMDIAG program find such records and root them out?
+The method is as follows:
+
+  The BCMDIAG program makes a table of all Key bytes in the BRODCAST
+Dataset with Key = X'03', and it then runs all the chains of Userid
+Messages, changing the X'03' entries in the table to something else,
+if that corresponding message was hit by running a Userid chain.  All
+the X'03' messages that are left over afterward must (of necessity) be
+not attached to any Userid, and therefore, they are the "orphaned"
+messages that we are looking for.
+
+  Once the BCMDIAG has found the orphaned User Messages, it has a
+choice, whether to keep them or to delete them.  If you run BCMDIAG
+with the REPORT keyword, then BCMDIAG keeps the messages unchanged.
+But if you run BCMDIAG with the DELBAD option, it converts all the
+orphaned messages into empty User Messages, with Key = X'FF' and first
+data byte equal to the "R" of the "TTR" or "CCHHR".  That "R" is the
+position of the record in the track.  So the orphaned messages are
+therefore converted into (subsequently usable) empty User Messages.
+
+
+JCL Requirements or TSO Allocations:
+--- ------------ -- --- -----------
+
+  The BCMDIAG program is a TSO command, but it uses the PUTLINE
+interface to write its output to the terminal.  Therefore you can
+run the BCMDIAG program under TSO-in-batch, and still see its
+output.  You can (of course) also run BCMDIAG as a TSO command.
+
+Allocation Requirement -
+
+  The particular copy of the BRODCAST dataset which you want to look
+at for orphaned records, must be pointed to by the BRODCAST DD name,
+as follows:
+
+ALLOC FI(BRODCAST) DA(your.BRODCAST.dataset) SH REUSE
+
+or
+
+//BRODCAST  DD  DISP=SHR,DSN=your.BRODCAST.dataset
+
+
+Subcommands:
+-----------
+            INSTRUCTIONS FOR BCMDIAG TSO COMMAND
+            ------------ --- ------ --- -------
+
+         BCMDIAG   -  Valid Execution Parms are :
+         BCMDIAG REPORT - Report orphaned USER messages
+         BCMDIAG DELBAD - Delete orphaned USER messages
+
+
+Report:
+------
+
+  Here is a sample output for BCMDIAG  REPORT :
+
+           BCMDIAG  Broadcast Manager
+           -------  --------- -------
+
+           BCMDIAG   -  Valid Execution Parms are :
+           BCMDIAG REPORT - Report orphaned USER messages
+           BCMDIAG DELBAD - Delete orphaned USER messages
+
+           This Execution is with PARM of REPORT.
+
+           HEX NUMBER OF RECORDS IN TABLE      00002616
+           HEX NUMBER OF TABLE SIZE            00002620
+           TABLE ADDRESS IN HEX                0009C9E0
+           LAST RELATIVE BLOCK NUMBER READ       002615
+
+        The GETMAIN-ed Table has been filled with key values
+
+             Display of Orphaned User Messages
+             ------- -- -------- ---- --------
+ 000EF1 03  SAMPLE USER MESSAGE 1 .....
+ 000EF2 03  SAMPLE USER MESSAGE 2 .....
+ 000EF3 03  SAMPLE USER MESSAGE 3 .....
+
+        TOTAL ORPHANED TSO MESSAGES IN SYS1.BRODCAST           3
+
+        TOTAL  VALID   TSO MESSAGES IN SYS1.BRODCAST        3114
+        TOTAL DEFERRED TSO MESSAGES IN SYS1.BRODCAST        3114
+
+          Return Code is 0.
+
+--------------------------------------------------------------------
+
+  Here is a sample output for BCMDIAG  DELBAD :
+
+          BCMDIAG  Broadcast Manager
+          -------  --------- -------
+
+          BCMDIAG   -  Valid Execution Parms are :
+          BCMDIAG REPORT - Report orphaned USER messages
+          BCMDIAG DELBAD - Delete orphaned USER messages
+
+          This Execution is with PARM of DELBAD.
+
+          HEX NUMBER OF RECORDS IN TABLE      00002616
+          HEX NUMBER OF TABLE SIZE            00002620
+          TABLE ADDRESS IN HEX                0027D9E0
+
+          LAST RELATIVE BLOCK NUMBER READ       002615
+
+       The GETMAIN-ed Table has been filled with key values
+       Orphaned messages are now being deleted from BRODCAST
+
+            Display of Orphaned User Messages
+            ------- -- -------- ---- --------
+000EF1 03  SAMPLE USER MESSAGE 1 .....
+000EF2 03  SAMPLE USER MESSAGE 2 .....
+000EF3 03  SAMPLE USER MESSAGE 3 .....
+
+       TOTAL ORPHANED TSO MESSAGES IN SYS1.BRODCAST           3
+
+       TOTAL ORPHANED MSGS DELETED IN SYS1.BRODCAST           3
+       TOTAL DEFERRED TSO MESSAGES IN SYS1.BRODCAST        3114
+
+         Return Code is 0.
+
+
+Program Logic:
+------- -----
+
+  The basic principles of the program logic were mentioned above,
+in the "Description of Operation" section.
+
+
+Error Handling:
+----- --------
+
+  BCMDIAG responds to any keyword entry errors, by telling you what
+the correct options are.  The BCMDIAG program always produces the
+following instructions in all of its reports:
+
+          BCMDIAG   -  Valid Execution Parms are :
+          BCMDIAG REPORT - Report orphaned USER messages
+          BCMDIAG DELBAD - Delete orphaned USER messages
+
+
